@@ -19,6 +19,8 @@ if [ -n "$GIT_REPO_URL" ]; then
     git clone "$GIT_REPO_URL" /data
   else
     echo "Repository already exists, pulling latest changes..."
+    # Always set pull.rebase to avoid fatal divergent branch errors
+    git config --global pull.rebase true
     cd /data && git pull origin ${GIT_BRANCH:-main}
   fi
 
