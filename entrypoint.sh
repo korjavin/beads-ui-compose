@@ -38,6 +38,6 @@ if [ -n "$GIT_REPO_URL" ]; then
   fi
 fi
 
-echo "Starting Beads UI..."
+echo "Starting Beads UI server in foreground..."
 cd /data
-exec bdui start --host 0.0.0.0 --port 3000
+exec node $(npm root -g)/beads-ui/server/index.js --host 0.0.0.0 --port 3000
