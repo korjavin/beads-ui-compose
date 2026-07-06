@@ -24,6 +24,13 @@ if [ -n "$GIT_REPO_URL" ]; then
     echo "Bootstrapping beads database..."
     cd /data && bd bootstrap || true
   fi
+
+  # Ensure the Dolt remote uses the authenticated URL for pushing
+  if [ -d "/data/.beads" ]; then
+    cd /data
+    bd dolt remote remove origin 2>/dev/null || true
+    bd dolt remote add origin "git+${GIT_REPO_URL}"
+  fi
   
   if [ "$SYNC_ENABLED" = "true" ]; then
     echo "Starting background sync loop (Interval: ${SYNC_INTERVAL:-60}s)..."
@@ -38,6 +45,12 @@ if [ -n "$GIT_REPO_URL" ]; then
           git pull --rebase origin ${GIT_BRANCH:-main}
           git push origin ${GIT_BRANCH:-main}
           echo "Changes synced to GitHub."
+        fi
+        
+        # Sync dolt database to remote if it exists
+        if [ -d "/data/.beads" ]; then
+          bd dolt pull origin || true
+          bd dolt push || true
         fi
       done
     ) &
