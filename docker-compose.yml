@@ -9,6 +9,11 @@ services:
       - traefik_network
     volumes:
       - ${DATA_PATH:-./data}:/data
+    environment:
+      - GIT_REPO_URL=${GIT_REPO_URL}
+      - GIT_BRANCH=${GIT_BRANCH:-main}
+      - SYNC_ENABLED=${SYNC_ENABLED:-false}
+      - SYNC_INTERVAL=${SYNC_INTERVAL:-60}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=${TRAEFIK_NETWORK_NAME:-traefik_default}"
