@@ -18,6 +18,12 @@ if [ -n "$GIT_REPO_URL" ]; then
     echo "Repository already exists, pulling latest changes..."
     cd /data && git pull origin ${GIT_BRANCH:-main}
   fi
+
+  # Bootstrap beads database if needed (clones dolt data from git)
+  if [ -d "/data/.beads" ]; then
+    echo "Bootstrapping beads database..."
+    cd /data && bd bootstrap
+  fi
   
   if [ "$SYNC_ENABLED" = "true" ]; then
     echo "Starting background sync loop (Interval: ${SYNC_INTERVAL:-60}s)..."
