@@ -13,7 +13,7 @@ A git-ops docker-compose project to self-host [Beads UI](https://github.com/mant
    - Value: (get this from your Portainer stack → Webhooks)
 
 3. **Configure Portainer Stack:**
-   - **Repository URL:** `https://github.com/iv/beads-ui-compose`
+   - **Repository URL:** `https://github.com/korjavin/beads-ui-compose`
    - **Branch:** `deploy` *(Important: Not `master`)*
    - **Compose path:** `docker-compose.yml`
    - **Environment variables:** Use values from `.env.example`. Specifically, `DATA_PATH` needs to be an absolute path on your host (or a docker volume) containing your `.beads` database directory.

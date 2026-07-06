@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   beads-ui:
-    image: ${SERVICE_IMAGE:-ghcr.io/iv/beads-ui:latest}
+    image: ${SERVICE_IMAGE:-ghcr.io/korjavin/beads-ui:latest}
     container_name: ${SERVICE_CONTAINER_NAME:-beads-ui}
     restart: unless-stopped
     networks:
