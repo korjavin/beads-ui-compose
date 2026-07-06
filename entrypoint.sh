@@ -38,19 +38,27 @@ if [ -n "$GIT_REPO_URL" ]; then
       while true; do
         sleep ${SYNC_INTERVAL:-60}
         cd /data
-        git add .
-        # Only commit if there are changes
-        if ! git diff-index --quiet HEAD; then
-          git commit -m "Auto-sync from beads-ui"
-          git pull --rebase origin ${GIT_BRANCH:-main}
-          git push origin ${GIT_BRANCH:-main}
-          echo "Changes synced to GitHub."
-        fi
-        
-        # Sync dolt database to remote if it exists
-        if [ -d "/data/.beads" ]; then
-          bd dolt pull origin || true
-          bd dolt push || true
+        if [ "$READ_WRITE" = "true" ]; then
+          git add .
+          # Only commit if there are changes
+          if ! git diff-index --quiet HEAD; then
+            git commit -m "Auto-sync from beads-ui"
+            git pull --rebase origin ${GIT_BRANCH:-main}
+            git push origin ${GIT_BRANCH:-main}
+            echo "Changes synced to GitHub."
+          fi
+          
+          # Sync dolt database to remote if it exists
+          if [ -d "/data/.beads" ]; then
+            bd dolt pull origin || true
+            bd dolt push || true
+          fi
+        else
+          # Read-only mode: only pull latest changes from remote
+          git pull --rebase origin ${GIT_BRANCH:-main} || true
+          if [ -d "/data/.beads" ]; then
+            bd dolt pull origin || true
+          fi
         fi
       done
     ) &
