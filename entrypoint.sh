@@ -6,6 +6,9 @@ if [ -n "$GIT_REPO_URL" ]; then
   git config --global user.name "${GIT_USER_NAME:-beads-ui-bot}"
   git config --global user.email "${GIT_USER_EMAIL:-bot@beads-ui.local}"
 
+  dolt config --global --add user.name "${GIT_USER_NAME:-beads-ui-bot}"
+  dolt config --global --add user.email "${GIT_USER_EMAIL:-bot@beads-ui.local}"
+
   # To avoid issues with volume permissions
   git config --global --add safe.directory /data
 
@@ -54,7 +57,8 @@ if [ -n "$GIT_REPO_URL" ]; then
             bd dolt push || true
           fi
         else
-          # Read-only mode: only pull latest changes from remote
+          # Read-only mode: discard local jsonl exports and only pull latest changes
+          git restore . || true
           git pull --rebase origin ${GIT_BRANCH:-main} || true
           if [ -d "/data/.beads" ]; then
             bd dolt pull origin || true
