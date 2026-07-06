@@ -1,6 +1,9 @@
-FROM node:22-alpine
+FROM node:22-bookworm-slim
 
-RUN apk add --no-cache git
+RUN apt-get update && apt-get install -y git curl ca-certificates && rm -rf /var/lib/apt/lists/*
+
+RUN curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash
+RUN curl -fsSL https://raw.githubusercontent.com/gastownhall/beads/main/scripts/install.sh | bash
 
 RUN npm install -g beads-ui
 
