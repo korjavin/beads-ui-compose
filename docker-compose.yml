@@ -21,8 +21,6 @@ services:
       - "traefik.http.routers.beads-ui.entrypoints=websecure"
       - "traefik.http.routers.beads-ui.tls.certresolver=${TRAEFIK_CERTRESOLVER:-myresolver}"
       - "traefik.http.services.beads-ui.loadbalancer.server.port=3000"
-      # Optional OAuth2 protection:
-      - "traefik.http.routers.beads-ui.middlewares=auth-errors@docker,forward-auth@docker"
 
 networks:
   traefik_network:
