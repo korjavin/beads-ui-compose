@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  beads-ui:
+    image: ${SERVICE_IMAGE:-ghcr.io/iv/beads-ui:latest}
+    container_name: ${SERVICE_CONTAINER_NAME:-beads-ui}
+    restart: unless-stopped
+    networks:
+      - traefik_network
+    volumes:
+      - ${DATA_PATH:-./data}:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK_NAME:-traefik_default}"
+      - "traefik.http.routers.beads-ui.rule=Host(`${SERVICE_HOST}`)"
+      - "traefik.http.routers.beads-ui.entrypoints=websecure"
+      - "traefik.http.routers.beads-ui.tls.certresolver=${TRAEFIK_CERTRESOLVER:-myresolver}"
+      - "traefik.http.services.beads-ui.loadbalancer.server.port=3000"
+      # Optional OAuth2 protection:
+      - "traefik.http.routers.beads-ui.middlewares=auth-errors@docker,forward-auth@docker"
+
+networks:
+  traefik_network:
+    external: true
+    name: ${TRAEFIK_NETWORK_NAME:-traefik_default}
