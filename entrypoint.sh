@@ -20,9 +20,9 @@ if [ -n "$GIT_REPO_URL" ]; then
   fi
 
   # Bootstrap beads database if needed (clones dolt data from git)
-  if [ -d "/data/.beads" ]; then
+  if [ -d "/data/.beads" ] && [ ! -d "/data/.beads/embeddeddolt" ]; then
     echo "Bootstrapping beads database..."
-    cd /data && bd bootstrap
+    cd /data && bd bootstrap || true
   fi
   
   if [ "$SYNC_ENABLED" = "true" ]; then
