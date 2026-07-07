@@ -1,6 +1,6 @@
 FROM node:22-bookworm-slim
 
-RUN apt-get update && apt-get install -y git curl ca-certificates sudo && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git curl ca-certificates sudo tini && rm -rf /var/lib/apt/lists/*
 
 RUN curl -L https://github.com/dolthub/dolt/releases/latest/download/install.sh | bash
 RUN curl -fsSL https://raw.githubusercontent.com/gastownhall/beads/main/scripts/install.sh | bash
@@ -14,4 +14,5 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 3000
 
+ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/entrypoint.sh"]
